@@ -45,7 +45,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
     }
 
-    button, input, select { font: inherit; }
+    button, input, select, textarea { font: inherit; }
 
     button {
       cursor: pointer;
@@ -66,14 +66,14 @@
       background: color-mix(in srgb, var(--bg) 90%, transparent);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--line);
-      padding: 16px 14px 12px;
+      padding: 12px 12px 10px;
     }
 
     .top-row {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
 
     .caption {
@@ -82,12 +82,12 @@
       gap: 5px;
       margin: 0;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
     }
 
     h1 {
       margin: 2px 0 0;
-      font-size: 22px;
+      font-size: 20px;
       line-height: 1.2;
     }
 
@@ -97,13 +97,13 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10.5px;
       margin-top: 3px;
     }
 
     .icon-btn {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       border: 0;
       border-radius: 999px;
       background: var(--soft);
@@ -111,7 +111,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 17px;
       flex-shrink: 0;
     }
 
@@ -119,7 +119,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-top: 14px;
+      margin-top: 10px;
     }
 
     .month-title-btn {
@@ -128,53 +128,53 @@
       border-radius: 18px;
       background: transparent;
       color: var(--text);
-      padding: 9px 8px;
+      padding: 6px 8px;
       text-align: center;
     }
 
     .month-title {
       font-weight: 800;
-      font-size: 18px;
+      font-size: 17px;
     }
 
     .month-sub {
       color: var(--muted);
-      font-size: 11px;
-      margin-top: 2px;
+      font-size: 10.5px;
+      margin-top: 1px;
     }
 
     .legend {
       display: flex;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 6px;
+      margin-top: 9px;
       flex-wrap: wrap;
     }
 
     .pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      padding: 7px 11px;
+      padding: 5px 9px;
       background: var(--soft);
       color: var(--text);
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       display: inline-block;
     }
 
-    .main { padding: 12px; }
+    .main { padding: 10px; }
 
     .calendar-card {
       border: 1px solid var(--line);
       background: var(--card);
-      border-radius: 24px;
+      border-radius: 22px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
     }
@@ -187,10 +187,10 @@
     }
 
     .dow-cell {
-      padding: 9px 0;
+      padding: 7px 0;
       text-align: center;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
     }
 
@@ -204,11 +204,11 @@
 
     .day-cell {
       position: relative;
-      min-height: 104px;
+      min-height: 68px;
       border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
       background: var(--card);
-      padding: 6px 4px 5px;
+      padding: 4px 3px;
       text-align: left;
       overflow: hidden;
     }
@@ -225,21 +225,22 @@
       align-items: center;
       justify-content: space-between;
       gap: 2px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .day-number {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       border: 0;
       border-radius: 999px;
       background: transparent;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--text);
+      padding: 0;
     }
 
     .day-number.today {
@@ -254,44 +255,43 @@
 
     .holiday-name {
       color: var(--sun-text);
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 700;
-      line-height: 1.1;
-      margin: -2px 0 3px 2px;
+      line-height: 1.05;
+      margin: -2px 0 2px 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .mini-add {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       border: 0;
       border-radius: 999px;
       background: color-mix(in srgb, var(--soft) 75%, white);
       color: var(--muted);
-      font-size: 15px;
+      font-size: 13px;
       line-height: 1;
+      padding: 0;
     }
 
-    body.dark .mini-add {
-      background: #1e293b;
-    }
+    body.dark .mini-add { background: #1e293b; }
 
     .event-list {
       display: grid;
-      gap: 3px;
+      gap: 2px;
     }
 
     .event-chip {
       width: 100%;
       border: 0;
-      border-radius: 8px;
+      border-radius: 7px;
       color: white;
-      padding: 3px 4px;
+      padding: 2px 3px;
       text-align: left;
-      font-size: 10.5px;
-      line-height: 1.15;
+      font-size: 9.5px;
+      line-height: 1.12;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -299,24 +299,39 @@
 
     .more-chip {
       color: var(--muted);
-      font-size: 10.5px;
-      padding: 1px 4px;
+      font-size: 9px;
+      padding: 0 3px;
     }
 
-    .selected-panel {
-      margin-top: 12px;
+    .month-panel {
+      margin-top: 10px;
       border: 1px solid var(--line);
       border-radius: 22px;
       background: var(--card);
       padding: 12px;
     }
 
-    .selected-title {
+    .month-panel-title {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 8px;
       font-weight: 800;
+    }
+
+    .month-list-date {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .month-list-date:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
     }
 
     .list-event {
@@ -326,7 +341,7 @@
       border-radius: 16px;
       background: var(--soft);
       color: var(--text);
-      padding: 10px;
+      padding: 9px 10px;
       text-align: left;
       margin-top: 7px;
     }
@@ -341,6 +356,14 @@
       margin-top: 2px;
       font-size: 15px;
       font-weight: 800;
+    }
+
+    .list-event-note {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      white-space: pre-wrap;
     }
 
     .empty {
@@ -400,7 +423,7 @@
 
     .center { text-align: center; }
 
-    .input, .select {
+    .input, .select, .textarea {
       width: 100%;
       border: 1px solid var(--line);
       background: var(--card);
@@ -409,6 +432,12 @@
       padding: 13px 14px;
       outline: none;
       min-height: 48px;
+    }
+
+    .textarea {
+      min-height: 84px;
+      resize: vertical;
+      line-height: 1.5;
     }
 
     .login-card .input {
@@ -464,6 +493,8 @@
     .modal {
       width: 100%;
       max-width: 520px;
+      max-height: 92vh;
+      overflow-y: auto;
       background: var(--card);
       color: var(--text);
       border-radius: 28px;
@@ -557,6 +588,8 @@
           <input id="endInput" class="input" type="time" />
         </div>
 
+        <textarea id="noteInput" class="textarea" placeholder="備考：誰との飲み会か、持ち物、場所の補足など"></textarea>
+
         <div class="two-col">
           <button id="meBtn" class="user-choice" type="button">わたし</button>
           <button id="partnerBtn" class="user-choice" type="button">彼</button>
@@ -622,8 +655,6 @@
 
     const PRESET_TITLES = ["歯医者", "美容院", "野球甲子園", "野球ドーム", "飲み会"];
 
-    // 2026年の国民の祝日・休日
-    // 必要になったら、ここへ2027年以降の祝日も追加できます。
     const HOLIDAYS = {
       "2026-01-01": "元日",
       "2026-01-12": "成人の日",
@@ -670,6 +701,7 @@
     const dateInput = document.getElementById("dateInput");
     const startInput = document.getElementById("startInput");
     const endInput = document.getElementById("endInput");
+    const noteInput = document.getElementById("noteInput");
     const meBtn = document.getElementById("meBtn");
     const partnerBtn = document.getElementById("partnerBtn");
     const repeatSelect = document.getElementById("repeatSelect");
@@ -695,6 +727,9 @@
     }
     function minutesToTime(minutes) {
       return `${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}`;
+    }
+    function addHoursToTime(time, hours) {
+      return minutesToTime(timeToMinutes(time) + hours * 60);
     }
     function escapeHtml(text) {
       return String(text || "")
@@ -740,6 +775,23 @@
           if (t !== 0) return t;
           return (a.title || "").localeCompare(b.title || "");
         });
+    }
+
+    function getEventsForCurrentMonth() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const result = [];
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const d = new Date(year, month, day);
+        const key = toDateKey(d);
+        const dayEvents = getEventsForDate(key);
+        if (dayEvents.length > 0) {
+          result.push({ date: d, dateKey: key, events: dayEvents });
+        }
+      }
+      return result;
     }
 
     function render() {
@@ -833,7 +885,7 @@
       const todayKey = toDateKey(new Date());
       const selectedKey = toDateKey(selectedDate);
       const currentMonth = currentDate.getMonth();
-      const selectedEvents = getEventsForDate(selectedKey);
+      const monthEvents = getEventsForCurrentMonth();
 
       root.innerHTML = `
         <div class="app">
@@ -883,17 +935,21 @@
               </div>
             </div>
 
-            <section class="selected-panel">
-              <div class="selected-title">
-                <span>${selectedDate.getMonth() + 1}/${selectedDate.getDate()} の予定</span>
+            <section class="month-panel">
+              <div class="month-panel-title">
+                <span>${currentDate.getMonth() + 1}月の予定一覧</span>
                 <button id="addSelectedBtn" class="icon-btn" type="button">＋</button>
               </div>
               <div>
-                ${selectedEvents.length === 0 ? `<div class="empty">予定はありません。</div>` : selectedEvents.map((ev) => `
-                  <button class="list-event" data-event-id="${ev.id}" style="border-left-color:${ev.color || USERS[ev.user]?.color || USERS.me.color};" type="button">
-                    <div class="list-event-time">${escapeHtml(ev.startTime)} - ${escapeHtml(ev.endTime)} ${ev.repeat && ev.repeat !== "none" ? `・${ev.repeat === "daily" ? "毎日" : "毎週"}` : ""}</div>
-                    <div class="list-event-title">${escapeHtml(ev.title)}</div>
-                  </button>
+                ${monthEvents.length === 0 ? `<div class="empty">この月の予定はありません。</div>` : monthEvents.map((group) => `
+                  <div class="month-list-date">${group.date.getMonth() + 1}/${group.date.getDate()}（${["日", "月", "火", "水", "木", "金", "土"][group.date.getDay()]}）</div>
+                  ${group.events.map((ev) => `
+                    <button class="list-event" data-event-id="${ev.id}" style="border-left-color:${ev.color || USERS[ev.user]?.color || USERS.me.color};" type="button">
+                      <div class="list-event-time">${escapeHtml(ev.startTime)} - ${escapeHtml(ev.endTime)} ${ev.repeat && ev.repeat !== "none" ? `・${ev.repeat === "daily" ? "毎日" : "毎週"}` : ""}</div>
+                      <div class="list-event-title">${escapeHtml(ev.title)}</div>
+                      ${ev.note ? `<div class="list-event-note">${escapeHtml(ev.note)}</div>` : ""}
+                    </button>
+                  `).join("")}
                 `).join("")}
               </div>
             </section>
@@ -909,7 +965,7 @@
     function renderDayCell(date, currentMonth, todayKey, selectedKey) {
       const key = toDateKey(date);
       const dayEvents = getEventsForDate(key);
-      const shown = dayEvents.slice(0, 3);
+      const shown = dayEvents.slice(0, 2);
       const classes = ["day-cell"];
       const day = date.getDay();
       const holiday = isHoliday(key);
@@ -935,10 +991,10 @@
           <div class="event-list">
             ${shown.map((ev) => `
               <button class="event-chip" data-event-id="${ev.id}" style="background:${ev.color || USERS[ev.user]?.color || USERS.me.color};" type="button">
-                ${escapeHtml(ev.startTime)} ${escapeHtml(ev.title)}
+                ${escapeHtml(ev.title)} ${escapeHtml(ev.startTime)}
               </button>
             `).join("")}
-            ${dayEvents.length > 3 ? `<div class="more-chip">ほか ${dayEvents.length - 3}件</div>` : ""}
+            ${dayEvents.length > 2 ? `<div class="more-chip">ほか ${dayEvents.length - 2}件</div>` : ""}
           </div>
         </div>
       `;
@@ -1015,7 +1071,8 @@
       customTitleInput.style.display = "block";
       dateInput.value = dateKey;
       startInput.value = time;
-      endInput.value = minutesToTime(timeToMinutes(time) + 60);
+      endInput.value = addHoursToTime(time, 2);
+      noteInput.value = "";
       repeatSelect.value = "none";
       notifyInput.checked = true;
       updateOwnerButtons();
@@ -1041,6 +1098,7 @@
       dateInput.value = original.date;
       startInput.value = original.startTime;
       endInput.value = original.endTime;
+      noteInput.value = original.note || "";
       repeatSelect.value = original.repeat || "none";
       notifyInput.checked = !!original.notify;
       updateOwnerButtons();
@@ -1070,7 +1128,7 @@
       let startTime = startInput.value;
       let endTime = endInput.value;
       if (timeToMinutes(endTime) <= timeToMinutes(startTime)) {
-        endTime = minutesToTime(timeToMinutes(startTime) + 30);
+        endTime = addHoursToTime(startTime, 2);
       }
 
       const savedDate = dateInput.value;
@@ -1080,6 +1138,7 @@
         startTime,
         endTime,
         title: finalTitle,
+        note: noteInput.value.trim(),
         user: selectedOwner,
         color: USERS[selectedOwner].color,
         repeat: repeatSelect.value || "none",
@@ -1123,12 +1182,17 @@
         closeModal();
       } catch (error) {
         console.error(error);
-        alert("削除できませんでした。Firestoreルールや通信状態を確認してください。");
+        alert("削除できませんでした。Firestoreルールや通信状態を確認してください。こう");
       }
     }
 
     titleSelect.addEventListener("change", () => {
       customTitleInput.style.display = titleSelect.value === "自由入力" || !PRESET_TITLES.includes(titleSelect.value) ? "block" : "none";
+    });
+    startInput.addEventListener("change", () => {
+      if (!editingEvent && startInput.value) {
+        endInput.value = addHoursToTime(startInput.value, 2);
+      }
     });
     meBtn.addEventListener("click", () => {
       selectedOwner = "me";
