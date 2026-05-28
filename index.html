@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2人予定表・月表示 V3</title>
+  <title>2人予定表・月表示 V4</title>
   <style>
     :root {
       --bg:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e5e7eb; --card:#ffffff; --soft:#f8fafc;
@@ -26,45 +26,17 @@
 
   <div id="eventModal" class="modal-bg">
     <div class="modal">
-      <div class="modal-head">
-        <div id="modalTitle" class="modal-title">予定を追加</div>
-        <button id="closeModalBtn" class="icon-btn" type="button">×</button>
-      </div>
+      <div class="modal-head"><div id="modalTitle" class="modal-title">予定を追加</div><button id="closeModalBtn" class="icon-btn" type="button">×</button></div>
       <div class="form-stack">
-        <select id="titleSelect" class="select">
-          <option value="">内容を選択</option>
-          <option value="歯医者">歯医者</option>
-          <option value="美容院">美容院</option>
-          <option value="野球甲子園">野球甲子園</option>
-          <option value="野球ドーム">野球ドーム</option>
-          <option value="飲み会">飲み会</option>
-          <option value="自由入力">自由入力</option>
-        </select>
+        <select id="titleSelect" class="select"><option value="">内容を選択</option><option value="歯医者">歯医者</option><option value="美容院">美容院</option><option value="野球甲子園">野球甲子園</option><option value="野球ドーム">野球ドーム</option><option value="飲み会">飲み会</option><option value="自由入力">自由入力</option></select>
         <input id="customTitleInput" class="input" placeholder="内容を入力" />
         <input id="dateInput" class="input" type="date" />
-        <div class="two-col">
-          <input id="startInput" class="input" type="time" />
-          <input id="endInput" class="input" type="time" />
-        </div>
+        <div class="two-col"><input id="startInput" class="input" type="time" /><input id="endInput" class="input" type="time" /></div>
         <textarea id="noteInput" class="textarea" placeholder="備考：誰との飲み会か、持ち物、場所の補足など"></textarea>
-        <div class="three-col">
-          <button id="meBtn" class="user-choice" type="button">わたし</button>
-          <button id="partnerBtn" class="user-choice" type="button">彼</button>
-          <button id="sharedBtn" class="user-choice" type="button">共通</button>
-        </div>
-        <select id="repeatSelect" class="select">
-          <option value="none">繰り返しなし</option>
-          <option value="daily">毎日</option>
-          <option value="weekly">毎週</option>
-        </select>
-        <label class="switch-row">
-          <span>開始10分前に通知</span>
-          <input id="notifyInput" type="checkbox" />
-        </label>
-        <div class="bottom-actions">
-          <button id="deleteBtn" class="danger-btn" type="button">削除</button>
-          <button id="saveBtn" class="primary-btn" type="button">保存</button>
-        </div>
+        <div class="three-col"><button id="meBtn" class="user-choice" type="button">わたし</button><button id="partnerBtn" class="user-choice" type="button">彼</button><button id="sharedBtn" class="user-choice" type="button">共通</button></div>
+        <select id="repeatSelect" class="select"><option value="none">繰り返しなし</option><option value="daily">毎日</option><option value="weekly">毎週</option></select>
+        <label class="switch-row"><span>開始10分前に通知</span><input id="notifyInput" type="checkbox" /></label>
+        <div class="bottom-actions"><button id="deleteBtn" class="danger-btn" type="button">削除</button><button id="saveBtn" class="primary-btn" type="button">保存</button></div>
       </div>
     </div>
   </div>
@@ -84,7 +56,6 @@
       measurementId: "G-1F0GKSWMTG"
     };
 
-    const ALLOWED_EMAILS = ["nishida0510@gmail.com", "shiba10492@gmail.com"];
     const SHARED_GROUP_ID = "couple-calendar-001";
 
     const USERS = {
@@ -102,59 +73,32 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let currentUser = null, authChecked = false, currentDate = new Date(), selectedDate = new Date(), events = [], online = false, loading = true, dark = localStorage.getItem("schedule-dark") === "true", editingEvent = null, selectedOwner = "me", unsubscribeEvents = null;
+    let currentUser = null, authChecked = false, currentDate = new Date(), selectedDate = new Date(), events = [], online = false, loading = true, dark = localStorage.getItem("schedule-dark") === "true", editingEvent = null, selectedOwner = "shared", unsubscribeEvents = null;
 
-    const root = document.getElementById("root");
-    const modalEl = document.getElementById("eventModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const titleSelect = document.getElementById("titleSelect");
-    const customTitleInput = document.getElementById("customTitleInput");
-    const dateInput = document.getElementById("dateInput");
-    const startInput = document.getElementById("startInput");
-    const endInput = document.getElementById("endInput");
-    const noteInput = document.getElementById("noteInput");
-    const meBtn = document.getElementById("meBtn");
-    const partnerBtn = document.getElementById("partnerBtn");
-    const sharedBtn = document.getElementById("sharedBtn");
-    const repeatSelect = document.getElementById("repeatSelect");
-    const notifyInput = document.getElementById("notifyInput");
-    const deleteBtn = document.getElementById("deleteBtn");
-    const saveBtn = document.getElementById("saveBtn");
+    const root = document.getElementById("root"), modalEl = document.getElementById("eventModal"), modalTitle = document.getElementById("modalTitle"), closeModalBtn = document.getElementById("closeModalBtn"), titleSelect = document.getElementById("titleSelect"), customTitleInput = document.getElementById("customTitleInput"), dateInput = document.getElementById("dateInput"), startInput = document.getElementById("startInput"), endInput = document.getElementById("endInput"), noteInput = document.getElementById("noteInput"), meBtn = document.getElementById("meBtn"), partnerBtn = document.getElementById("partnerBtn"), sharedBtn = document.getElementById("sharedBtn"), repeatSelect = document.getElementById("repeatSelect"), notifyInput = document.getElementById("notifyInput"), deleteBtn = document.getElementById("deleteBtn"), saveBtn = document.getElementById("saveBtn");
 
-    function pad(n){return String(n).padStart(2,"0")}
-    function toDateKey(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
-    function addDays(date,days){const d=new Date(date);d.setDate(d.getDate()+days);return d}
-    function addMonths(date,months){const d=new Date(date);d.setMonth(d.getMonth()+months);return d}
-    function timeToMinutes(time){const [h,m]=time.split(":").map(Number);return h*60+m}
-    function minutesToTime(minutes){return `${pad(Math.floor(minutes/60))}:${pad(minutes%60)}`}
-    function addHoursToTime(time,hours){return minutesToTime(timeToMinutes(time)+hours*60)}
-    function escapeHtml(text){return String(text||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-    function isHoliday(dateKey){return Boolean(HOLIDAYS[dateKey])}
-    function getDefaultOwnerByEmail(email){if(!email)return "me";return email===ALLOWED_EMAILS[1]?"partner":"me"}
+    function pad(n){return String(n).padStart(2,"0")} function toDateKey(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`} function addDays(date,days){const d=new Date(date);d.setDate(d.getDate()+days);return d} function addMonths(date,months){const d=new Date(date);d.setMonth(d.getMonth()+months);return d} function timeToMinutes(time){const [h,m]=time.split(":").map(Number);return h*60+m} function minutesToTime(minutes){return `${pad(Math.floor(minutes/60))}:${pad(minutes%60)}`} function addHoursToTime(time,hours){return minutesToTime(timeToMinutes(time)+hours*60)} function escapeHtml(text){return String(text||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")} function isHoliday(dateKey){return Boolean(HOLIDAYS[dateKey])}
+    function getDefaultOwner(){return "shared"}
     function getMonthCells(baseDate){const first=new Date(baseDate.getFullYear(),baseDate.getMonth(),1);const start=new Date(first);start.setDate(first.getDate()-first.getDay());return Array.from({length:42},(_,i)=>addDays(start,i))}
-    function eventOccursOn(event,dateKey){if(event.date===dateKey)return true;if(!event.repeat||event.repeat==="none")return false;const base=new Date(event.date+"T00:00:00");const target=new Date(dateKey+"T00:00:00");const diffDays=Math.round((target-base)/86400000);if(diffDays<0)return false;if(event.repeat==="daily")return true;if(event.repeat==="weekly")return diffDays%7===0;return false}
+    function eventOccursOn(event,dateKey){if(event.date===dateKey)return true;if(!event.repeat||event.repeat==="none")return false;const base=new Date(event.date+"T00:00:00"),target=new Date(dateKey+"T00:00:00"),diffDays=Math.round((target-base)/86400000);if(diffDays<0)return false;if(event.repeat==="daily")return true;if(event.repeat==="weekly")return diffDays%7===0;return false}
     function getEventsForDate(dateKey){return events.filter(e=>eventOccursOn(e,dateKey)).map(e=>({...e,instanceDate:dateKey})).sort((a,b)=>{const t=(a.startTime||"00:00").localeCompare(b.startTime||"00:00");return t!==0?t:(a.title||"").localeCompare(b.title||"")})}
     function getEventsForCurrentMonth(){const y=currentDate.getFullYear(),m=currentDate.getMonth(),days=new Date(y,m+1,0).getDate(),result=[];for(let day=1;day<=days;day++){const d=new Date(y,m,day),key=toDateKey(d),dayEvents=getEventsForDate(key);if(dayEvents.length>0)result.push({date:d,dateKey:key,events:dayEvents})}return result}
 
     function render(){document.body.classList.toggle("dark",dark);if(!authChecked){root.innerHTML=`<div class="login-wrap"><div class="center"><div class="lock-icon">🔒</div><p>ログイン状態を確認中...</p></div></div>`;return}if(!currentUser){renderLogin();return}renderApp()}
-    function renderLogin(){root.innerHTML=`<div class="login-wrap"><div class="login-card"><div class="center"><div class="lock-icon">🔒</div><p style="margin:0;color:#64748b;font-size:12px;">2人だけの共有カレンダー</p><h1 style="margin:4px 0 6px;">ログイン</h1><p style="margin:0 0 18px;color:#64748b;font-size:14px;">登録済みの人だけ利用できます。</p></div><div class="form-stack"><input id="loginEmail" class="input" type="email" placeholder="メールアドレス" autocomplete="email" /><input id="loginPassword" class="input" type="password" placeholder="パスワード" autocomplete="current-password" /><div id="loginError" class="error" style="display:none;"></div><button id="loginBtn" class="primary-btn" type="button">ログイン</button></div><p class="hint">Firebase Authenticationに登録したメールアドレスとパスワードでログインしてください。</p></div></div>`;document.getElementById("loginBtn").addEventListener("click",login);document.getElementById("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()})}
-    async function login(){const email=document.getElementById("loginEmail").value.trim(),password=document.getElementById("loginPassword").value,errorEl=document.getElementById("loginError"),loginBtn=document.getElementById("loginBtn");errorEl.style.display="none";errorEl.textContent="";if(!ALLOWED_EMAILS.includes(email)){errorEl.textContent="このメールアドレスは利用許可されていません。";errorEl.style.display="block";return}if(!password){errorEl.textContent="パスワードを入力してください。";errorEl.style.display="block";return}try{loginBtn.textContent="ログイン中...";loginBtn.disabled=true;await signInWithEmailAndPassword(auth,email,password)}catch(error){console.error(error);errorEl.textContent="ログインできませんでした。メールアドレスとパスワードを確認してください。";errorEl.style.display="block"}finally{loginBtn.textContent="ログイン";loginBtn.disabled=false}}
+    function renderLogin(){root.innerHTML=`<div class="login-wrap"><div class="login-card"><div class="center"><div class="lock-icon">🔒</div><p style="margin:0;color:#64748b;font-size:12px;">2人だけの共有カレンダー</p><h1 style="margin:4px 0 6px;">ログイン</h1><p style="margin:0 0 18px;color:#64748b;font-size:14px;">登録済みのメールアドレスとパスワードでログインしてください。</p></div><div class="form-stack"><input id="loginEmail" class="input" type="email" placeholder="メールアドレス" autocomplete="email" /><input id="loginPassword" class="input" type="password" placeholder="パスワード" autocomplete="current-password" /><div id="loginError" class="error" style="display:none;"></div><button id="loginBtn" class="primary-btn" type="button">ログイン</button></div><p class="hint">利用者の制限はFirebase AuthenticationとFirestoreルールで行います。</p></div></div>`;document.getElementById("loginBtn").addEventListener("click",login);document.getElementById("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login()})}
+    async function login(){const email=document.getElementById("loginEmail").value.trim(),password=document.getElementById("loginPassword").value,errorEl=document.getElementById("loginError"),loginBtn=document.getElementById("loginBtn");errorEl.style.display="none";errorEl.textContent="";if(!email){errorEl.textContent="メールアドレスを入力してください。";errorEl.style.display="block";return}if(!password){errorEl.textContent="パスワードを入力してください。";errorEl.style.display="block";return}try{loginBtn.textContent="ログイン中...";loginBtn.disabled=true;await signInWithEmailAndPassword(auth,email,password)}catch(error){console.error(error);errorEl.textContent="ログインできませんでした。メールアドレスとパスワードを確認してください。";errorEl.style.display="block"}finally{loginBtn.textContent="ログイン";loginBtn.disabled=false}}
 
     function renderApp(){const cells=getMonthCells(currentDate),todayKey=toDateKey(new Date()),selectedKey=toDateKey(selectedDate),currentMonth=currentDate.getMonth(),monthEvents=getEventsForCurrentMonth();root.innerHTML=`<div class="app"><header class="header"><div class="top-row"><div><p class="caption">${online?"🟢":"🔴"} 2人用共有カレンダー ${loading?"読み込み中":online?"同期中":"未接続"}</p><h1>スケジュール</h1><div class="login-email">ログイン中：${escapeHtml(currentUser.email)}</div></div><div style="display:flex;gap:6px;"><button id="darkBtn" class="icon-btn" type="button">${dark?"☀️":"🌙"}</button><button id="logoutBtn" class="icon-btn" type="button">↩</button></div></div><div class="month-row"><button id="prevMonthBtn" class="icon-btn" type="button">‹</button><button id="todayBtn" class="month-title-btn" type="button"><div class="month-title">${currentDate.getFullYear()}年 ${currentDate.getMonth()+1}月</div><div class="month-sub">タップで今月へ</div></button><button id="nextMonthBtn" class="icon-btn" type="button">›</button></div><div class="legend"><span class="pill"><span class="dot" style="background:${USERS.me.color}"></span>わたし</span><span class="pill"><span class="dot" style="background:${USERS.partner.color}"></span>彼</span><span class="pill"><span class="dot" style="background:${USERS.shared.color}"></span>共通</span><span class="pill"><span class="dot" style="background:var(--sun-text)"></span>日祝</span><span class="pill"><span class="dot" style="background:var(--sat-text)"></span>土</span></div></header><main class="main"><div class="calendar-card"><div class="dow-row"><div class="dow-cell sun">日</div><div class="dow-cell">月</div><div class="dow-cell">火</div><div class="dow-cell">水</div><div class="dow-cell">木</div><div class="dow-cell">金</div><div class="dow-cell sat">土</div></div><div class="month-grid">${cells.map(d=>renderDayCell(d,currentMonth,todayKey,selectedKey)).join("")}</div></div><section class="month-panel"><div class="month-panel-title"><span>${currentDate.getMonth()+1}月の予定一覧</span><button id="addSelectedBtn" class="icon-btn" type="button">＋</button></div><div>${monthEvents.length===0?`<div class="empty">この月の予定はありません。</div>`:monthEvents.map(group=>`<div class="month-list-date">${group.date.getMonth()+1}/${group.date.getDate()}（${["日","月","火","水","木","金","土"][group.date.getDay()]}）</div>${group.events.map(ev=>`<button class="list-event" data-event-id="${ev.id}" style="border-left-color:${ev.color||USERS[ev.user]?.color||USERS.me.color};" type="button"><div class="list-event-time">${escapeHtml(ev.startTime)} - ${escapeHtml(ev.endTime)} ${ev.repeat&&ev.repeat!=="none"?`・${ev.repeat==="daily"?"毎日":"毎週"}`:""}</div><div class="list-event-title">${escapeHtml(ev.title)}</div>${ev.note?`<div class="list-event-note">${escapeHtml(ev.note)}</div>`:""}</button>`).join("")}`).join("")}</div></section></main><button id="fabBtn" class="fab" type="button">＋</button></div>`;bindAppEvents()}
     function renderDayCell(date,currentMonth,todayKey,selectedKey){const key=toDateKey(date),dayEvents=getEventsForDate(key),shown=dayEvents.slice(0,2),classes=["day-cell"],day=date.getDay(),holiday=isHoliday(key);if(date.getMonth()!==currentMonth)classes.push("other-month");if(key===selectedKey)classes.push("selected");if(day===0||holiday)classes.push("sunday-cell");if(day===6)classes.push("saturday-cell");const holidayName=HOLIDAYS[key]||"",dayNumberClass=["day-number"];if(key===todayKey)dayNumberClass.push("today");if(day===0||holiday)dayNumberClass.push("holiday-text");if(day===6)dayNumberClass.push("saturday-text");return `<div class="${classes.join(" ")}" data-date="${key}"><div class="day-head"><button class="${dayNumberClass.join(" ")}" data-date="${key}" type="button">${date.getDate()}</button><button class="mini-add" data-add-date="${key}" type="button">＋</button></div>${holidayName?`<div class="holiday-name">${escapeHtml(holidayName)}</div>`:""}<div class="event-list">${shown.map(ev=>`<button class="event-chip" data-event-id="${ev.id}" style="background:${ev.color||USERS[ev.user]?.color||USERS.me.color};" type="button">${escapeHtml(ev.title)} ${escapeHtml(ev.startTime)}</button>`).join("")}${dayEvents.length>2?`<div class="more-chip">ほか ${dayEvents.length-2}件</div>`:""}</div></div>`}
-
     function bindAppEvents(){document.getElementById("darkBtn").addEventListener("click",()=>{dark=!dark;localStorage.setItem("schedule-dark",String(dark));render()});document.getElementById("logoutBtn").addEventListener("click",async()=>{await signOut(auth)});document.getElementById("prevMonthBtn").addEventListener("click",()=>{currentDate=addMonths(currentDate,-1);selectedDate=new Date(currentDate.getFullYear(),currentDate.getMonth(),1);render()});document.getElementById("nextMonthBtn").addEventListener("click",()=>{currentDate=addMonths(currentDate,1);selectedDate=new Date(currentDate.getFullYear(),currentDate.getMonth(),1);render()});document.getElementById("todayBtn").addEventListener("click",()=>{currentDate=new Date();selectedDate=new Date();render()});document.getElementById("fabBtn").addEventListener("click",()=>openNew(toDateKey(selectedDate),"09:00"));document.getElementById("addSelectedBtn").addEventListener("click",()=>openNew(toDateKey(selectedDate),"09:00"));document.querySelectorAll(".day-cell, .day-number").forEach(el=>{el.addEventListener("click",e=>{if(e.target.closest(".mini-add")||e.target.closest(".event-chip"))return;const dateKey=el.dataset.date;if(!dateKey)return;selectedDate=new Date(dateKey+"T00:00:00");if(selectedDate.getMonth()!==currentDate.getMonth())currentDate=new Date(selectedDate);render()})});document.querySelectorAll(".mini-add").forEach(btn=>{btn.addEventListener("click",e=>{e.stopPropagation();selectedDate=new Date(btn.dataset.addDate+"T00:00:00");if(selectedDate.getMonth()!==currentDate.getMonth())currentDate=new Date(selectedDate);openNew(btn.dataset.addDate,"09:00")})});document.querySelectorAll(".event-chip, .list-event").forEach(btn=>{btn.addEventListener("click",e=>{e.stopPropagation();const ev=events.find(item=>item.id===btn.dataset.eventId);if(ev)openEdit(ev)})})}
     function updateOwnerButtons(){meBtn.className=selectedOwner==="me"?"user-choice active-me":"user-choice";partnerBtn.className=selectedOwner==="partner"?"user-choice active-partner":"user-choice";sharedBtn.className=selectedOwner==="shared"?"user-choice active-shared":"user-choice"}
-    function openNew(dateKey,time){editingEvent=null;selectedOwner=getDefaultOwnerByEmail(currentUser?.email);modalTitle.textContent="予定を追加";deleteBtn.style.display="none";titleSelect.value="";customTitleInput.value="";customTitleInput.style.display="block";dateInput.value=dateKey;startInput.value=time;endInput.value=addHoursToTime(time,2);noteInput.value="";repeatSelect.value="none";notifyInput.checked=true;updateOwnerButtons();modalEl.classList.add("show")}
-    function openEdit(original){editingEvent=original;selectedOwner=original.user||"me";modalTitle.textContent="予定を編集";deleteBtn.style.display="inline-block";if(PRESET_TITLES.includes(original.title)){titleSelect.value=original.title;customTitleInput.value="";customTitleInput.style.display="none"}else{titleSelect.value="自由入力";customTitleInput.value=original.title||"";customTitleInput.style.display="block"}dateInput.value=original.date;startInput.value=original.startTime;endInput.value=original.endTime;noteInput.value=original.note||"";repeatSelect.value=original.repeat||"none";notifyInput.checked=!!original.notify;updateOwnerButtons();modalEl.classList.add("show")}
-    function closeModal(){modalEl.classList.remove("show");editingEvent=null}
-    function getFinalTitle(){if(titleSelect.value==="自由入力"||!PRESET_TITLES.includes(titleSelect.value))return customTitleInput.value.trim();return titleSelect.value.trim()}
+    function openNew(dateKey,time){editingEvent=null;selectedOwner=getDefaultOwner();modalTitle.textContent="予定を追加";deleteBtn.style.display="none";titleSelect.value="";customTitleInput.value="";customTitleInput.style.display="block";dateInput.value=dateKey;startInput.value=time;endInput.value=addHoursToTime(time,2);noteInput.value="";repeatSelect.value="none";notifyInput.checked=true;updateOwnerButtons();modalEl.classList.add("show")}
+    function openEdit(original){editingEvent=original;selectedOwner=original.user||"shared";modalTitle.textContent="予定を編集";deleteBtn.style.display="inline-block";if(PRESET_TITLES.includes(original.title)){titleSelect.value=original.title;customTitleInput.value="";customTitleInput.style.display="none"}else{titleSelect.value="自由入力";customTitleInput.value=original.title||"";customTitleInput.style.display="block"}dateInput.value=original.date;startInput.value=original.startTime;endInput.value=original.endTime;noteInput.value=original.note||"";repeatSelect.value=original.repeat||"none";notifyInput.checked=!!original.notify;updateOwnerButtons();modalEl.classList.add("show")}
+    function closeModal(){modalEl.classList.remove("show");editingEvent=null} function getFinalTitle(){if(titleSelect.value==="自由入力"||!PRESET_TITLES.includes(titleSelect.value))return customTitleInput.value.trim();return titleSelect.value.trim()}
     async function saveEvent(){if(!currentUser)return;const finalTitle=getFinalTitle();if(!finalTitle){alert("内容を入力してください。");return}let startTime=startInput.value,endTime=endInput.value;if(timeToMinutes(endTime)<=timeToMinutes(startTime))endTime=addHoursToTime(startTime,2);const savedDate=dateInput.value,data={groupId:SHARED_GROUP_ID,date:savedDate,startTime,endTime,title:finalTitle,note:noteInput.value.trim(),user:selectedOwner,color:USERS[selectedOwner].color,repeat:repeatSelect.value||"none",notify:!!notifyInput.checked,updatedAt:serverTimestamp(),updatedByUid:currentUser.uid,updatedByEmail:currentUser.email};try{saveBtn.disabled=true;saveBtn.textContent="保存中...";if(editingEvent){await updateDoc(doc(db,"events",editingEvent.id),data)}else{await addDoc(collection(db,"events"),{...data,createdAt:serverTimestamp(),createdByUid:currentUser.uid,createdByEmail:currentUser.email})}selectedDate=new Date(savedDate+"T00:00:00");currentDate=new Date(selectedDate);closeModal();render()}catch(error){console.error(error);alert("保存できませんでした。Firestoreルールや通信状態を確認してください。") }finally{saveBtn.disabled=false;saveBtn.textContent="保存"}}
     async function deleteEvent(){if(!editingEvent||!currentUser)return;if(!confirm("この予定を削除しますか？"))return;try{await deleteDoc(doc(db,"events",editingEvent.id));closeModal()}catch(error){console.error(error);alert("削除できませんでした。Firestoreルールや通信状態を確認してください。")}}
-
     titleSelect.addEventListener("change",()=>{customTitleInput.style.display=titleSelect.value==="自由入力"||!PRESET_TITLES.includes(titleSelect.value)?"block":"none"});startInput.addEventListener("change",()=>{if(!editingEvent&&startInput.value)endInput.value=addHoursToTime(startInput.value,2)});meBtn.addEventListener("click",()=>{selectedOwner="me";updateOwnerButtons()});partnerBtn.addEventListener("click",()=>{selectedOwner="partner";updateOwnerButtons()});sharedBtn.addEventListener("click",()=>{selectedOwner="shared";updateOwnerButtons()});closeModalBtn.addEventListener("click",closeModal);modalEl.addEventListener("click",e=>{if(e.target===modalEl)closeModal()});saveBtn.addEventListener("click",saveEvent);deleteBtn.addEventListener("click",deleteEvent);
-    onAuthStateChanged(auth,async user=>{if(user&&!ALLOWED_EMAILS.includes(user.email)){await signOut(auth);currentUser=null}else{currentUser=user||null}authChecked=true;if(unsubscribeEvents){unsubscribeEvents();unsubscribeEvents=null}if(currentUser){listenEvents()}else{events=[];online=false;loading=false;render()}});
+    onAuthStateChanged(auth,user=>{currentUser=user||null;authChecked=true;if(unsubscribeEvents){unsubscribeEvents();unsubscribeEvents=null}if(currentUser){listenEvents()}else{events=[];online=false;loading=false;render()}});
     function listenEvents(){loading=true;render();const eventsRef=collection(db,"events");const q=query(eventsRef,where("groupId","==",SHARED_GROUP_ID));unsubscribeEvents=onSnapshot(q,snapshot=>{events=snapshot.docs.map(d=>({id:d.id,...d.data()}));loading=false;online=true;render()},error=>{console.error(error);loading=false;online=false;render();alert("Firestoreの読み込みに失敗しました。ルールを確認してください。")})}
     render();
   </script>
